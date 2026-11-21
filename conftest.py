@@ -15,6 +15,17 @@ def create_user():
     yield response, payload, login_data, token
     requests.delete(f"{Urls.MAIN_URL}{Handlers.DELETE_USER}", headers={'Authorization': f'{token}'})
 
+@pytest.fixture(scope="function")
+def delete_user():
+    user_data = {"token": None}
+    
+    yield user_data
+    
+    requests.delete(
+        f"{Urls.MAIN_URL}{Handlers.DELETE_USER}",
+        headers={"Authorization": f"{user_data['token']}"}
+    )
+
 @pytest.fixture
 def valid_ingredients():
     response = requests.get(f'{Urls.MAIN_URL}/api/ingredients')
